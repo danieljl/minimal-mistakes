@@ -12,6 +12,11 @@
   <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 {% endif %}
 
+{% if page.mathjax %}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+{% endif %}
+
 {% if site.search == true or page.layout == "search" %}
   {%- assign search_provider = site.search_provider | default: "lunr" -%}
   {%- case search_provider -%}

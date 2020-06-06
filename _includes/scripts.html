@@ -13,7 +13,32 @@
 {% endif %}
 
 {% if page.mathjax %}
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  {% comment %}
+    Script below is for compatibility with kramdown which generates math/tex. Refs:
+      - http://docs.mathjax.org/en/latest/upgrading/v2.html#math-script-example
+      - https://github.com/mathjax/MathJax/issues/2220
+      - https://11011110.github.io/blog/2019/10/17/mathjax-3-jekyll.html
+  {% endcomment %}
+  <script>
+    MathJax = {
+      options: {
+        renderActions: {
+          find: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = { node: text, delim: '', n: 0 };
+              math.end = { node: text, delim: '', n: 0 };
+              doc.math.push(math);
+            }
+          }, '']
+        }
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
   </script>
 {% endif %}
 
